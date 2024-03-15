@@ -1,33 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+ import { useEffect,useState } from 'react'
+import Header from './componenets/Header.jsx' ;
+import Main from './componenets/Main.jsx';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+ const [data , setdata]=useState({});
+ const [searchData, setSearchData]=useState("")
+  
+
+
+  function  handleSearch(searchdata){
+    setSearchData(searchdata);
+    let url=`https://api.weatherapi.com/v1/current.json?key=7482b17a320e476a811142725241503&q=${searchData}&aqi=yes`
+        async  function  searchForWeather  (){
+            const data= await fetch(url);
+            const res=await data.json()
+                
+            if(res){
+                setdata({...res})
+            }
+        } 
+         
+        searchForWeather()
+    
+     
+  }
+  console.log(data)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+       <div>
+        <Header handleSearch={handleSearch}/>
+        <Main/>
+       </div>
+    
     </>
   )
 }
